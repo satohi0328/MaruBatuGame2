@@ -17,7 +17,7 @@ public class MaruBatuObject : MonoBehaviour {
 		this.posX = x;
 		this.posY = y;
 		this.objType = argObjType;
-		this.panelNumber = x * 3 + y * 1;
+		this.panelNumber = x * 3 + y * 1 + 1;
 		this.dx = dx;
 
 		// オブジェクトの位置を調整
@@ -36,11 +36,22 @@ public class MaruBatuObject : MonoBehaviour {
 		} else {
 			this.gameObject.name = "Batu" + Mathf.Abs(argObjType) + "_" + dx + "_" + panelNumber; // オブジェクト名を変更
 		}
-
 	}
+
     public void GoUpObject() {
         // y軸のみ0にする
-		transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+        switch (Mathf.Abs(this.objType)) {
+			case 1: //小
+				transform.position = new Vector3(transform.position.x, 1f, transform.position.z);
+				break;
+			case 2: //中
+				transform.position = new Vector3(transform.position.x, 1.5f, transform.position.z);
+				break;
+			case 3: //大
+				transform.position = new Vector3(transform.position.x, 2f, transform.position.z);
+				break;
+		}
+
 
     }
 
@@ -49,6 +60,9 @@ public class MaruBatuObject : MonoBehaviour {
 		transform.position = new Vector3(transform.position.x, -10, transform.position.z);
 	}
 
+    public int GetObjectType() {
+		return this.objType;
+    }
 
 	// Use this for initialization
 	void Start () {

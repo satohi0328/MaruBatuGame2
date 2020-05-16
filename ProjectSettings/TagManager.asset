@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ObjectImage
   - MaruObject
+  - BatuObject
   layers:
   - Default
   - TransparentFX
