@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour {
     private bool isDragObject = false; //ドラッグしているかフラグ
     private GameObject tapImageObject; //タップされたイメージを保持
     private int whichTurn; //どっちのターンか保持(○:1 ,×:-1)
+    private AudioSource[] sources; // 音声の配列
 
     private GameObject coverMaruPanel; //下ウィンドウを擬似的に非活性にするためのパネルオブジェクト
     private GameObject coverBatuPanel; //上ウィンドウを擬似的に非活性にするためのパネルオブジェクト
@@ -43,6 +44,10 @@ public class GameManager : MonoBehaviour {
 
             }
         }
+
+        // 音声取得 [0:ゲームBGM][1:開始音][2:終了音][3:配置音]
+        sources = gameObject.GetComponents<AudioSource>();
+        sources[1].Play(); //開始音再生
 
         // 非活性用のパネルを取得
         coverMaruPanel = GameObject.Find("CoverMaruPanel");
@@ -78,10 +83,22 @@ public class GameManager : MonoBehaviour {
             coverBatuPanel.SetActive(true);
         }
 
-        // 画面がクリック or タップされた場合
-        if (Input.GetMouseButtonDown(0)|| Input.touchCount > 0) {
+
+        // 画面がタップされた場合
+        if (Input.touchCount > 0) {
+            // タッチ情報の取得
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began) {
+                Debug.Log("touchdown");
+                RayCheck();
+
+            }
+            // 画面がクリックされた場合
+        }else if (Input.GetMouseButtonDown(0)) {
+            Debug.Log("buttondown");
             RayCheck();
         }
+
 
         if (beRay) {
             //オブジェクトをドラッグ中の場合
@@ -130,8 +147,11 @@ public class GameManager : MonoBehaviour {
                         //パネル上に置く(表示)
                         ShowMaruBatuObject(wkPanel);
 
+
                         // 交代
                         whichTurn *= -1;
+                        sources[3].Play(); //ターンチェンジ音再生
+
                     }
 
 
@@ -162,7 +182,6 @@ public class GameManager : MonoBehaviour {
         if (Physics.Raycast(ray, out hit, 100.0f) &&
             (hit.collider.gameObject.CompareTag("MaruObject") && whichTurn > 0) ||
             (hit.collider.gameObject.CompareTag("BatuObject") && whichTurn < 0)) {
-            Debug.Log(hit.collider.gameObject.tag);
 
             // どのパネルか取得
             for (int i = 0; i < panelStatus.GetLength(0); i++) {
@@ -318,7 +337,7 @@ public class GameManager : MonoBehaviour {
 
     // ドラッグしたオブジェクトに一致する、オブジェクトをパネル上に移動
     private void ShowMaruBatuObject(GameObject wkPanel) {
-        Debug.Log(moveObject.name);
+
         switch (moveObject.name) {
             case "Maru_small1":
                 wkPanel.GetComponent<PanelManager>().GetMaru1_1().GoUpObject();
@@ -361,7 +380,6 @@ public class GameManager : MonoBehaviour {
 
     //ドラッグ元のオブジェクトをパネル下に移動
     private void HideMaruBatuObject(GameObject wkPanel) {
-        Debug.Log(moveObject.name);
         switch (moveObject.name) {
             case "Maru_small1":
                 wkPanel.GetComponent<PanelManager>().GetMaru1_1().GoDownObject();
@@ -483,9 +501,11 @@ public class GameManager : MonoBehaviour {
         switch (status) {
             case 1:
                 centerText.text = "まるのかち";
+                centerText.color = Color.red;
                 break;
             case -1:
                 centerText.text = "ばつのかち";
+                centerText.color = Color.blue;
                 break;
             case 0:
                 centerText.text = "ひきわけ";
@@ -494,7 +514,9 @@ public class GameManager : MonoBehaviour {
 
         gameSetFlg = true;
 
-       //中心のテキストパネルを表示
+        sources[2].Play(); //終了音再生
+
+        //中心のテキストパネルを表示
         centerPanel.SetActive(true);
         centerPanel.GetComponent<CenterPanelScript>().SetGameSetFlg(true);
 
