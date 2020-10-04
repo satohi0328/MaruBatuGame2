@@ -125,10 +125,25 @@ public class GameManager : MonoBehaviour {
                             if (wkPanel.GetComponent<PanelManager>().GetPanelNumber() != tapPanelObject.GetComponent<PanelManager>().GetPanelNumber()) {
                                 //パネル上のオブジェクトを再表示
                                 tapPanelObject.GetComponent<PanelManager>().ShowMaruBatuObject();
-                                // パネル下に移動
-                                HideMaruBatuObject(tapPanelObject);
                                 // パネル上に表示されているまるばつオブジェクト配列を更新
                                 tapPanelObject.GetComponent<PanelManager>().RemoveOrderArray(); //移動元パネルの配列から削除
+                                // パネル下に移動
+                                HideMaruBatuObject(tapPanelObject);
+
+                                // 勝敗判定(タップしたオブジェクトをどかした盤面で勝敗がつく可能性があるため)※レビュー指摘
+                                JudgeGameStatus();
+                                // どかした時点で勝敗が決まった場合
+                                if (gameSetFlg) {
+                                    // 移動元オブジェクトを徐々に上昇させる。
+                                    ShowMaruBatuObjectEX(wkPanel);
+
+                                    // ドラッグ終了処理
+                                    AfterEndDragObject();
+                                    return;
+                                }
+                                // レビュー指摘ここまで
+
+
                                 wkPanel.GetComponent<PanelManager>().AddOrderArray(moveObject.name); //移動先パネルの配列に追加
                             } else {
                                 // 移動元のオブジェクトを際表示
@@ -532,6 +547,48 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+
+    // 特殊な終わりかたをした場合のオブジェクトの表示
+    private void ShowMaruBatuObjectEX(GameObject wkPanel) {
+        switch (moveObject.name) {
+            case "Maru_small1":
+                wkPanel.GetComponent<PanelManager>().GetMaru1_1().GoUpObjectEX();
+                break;
+            case "Maru_small2":
+                wkPanel.GetComponent<PanelManager>().GetMaru1_2().GoUpObjectEX();
+                break;
+            case "Maru_mid1":
+                wkPanel.GetComponent<PanelManager>().GetMaru2_1().GoUpObjectEX();
+                break;
+            case "Maru_mid2":
+                wkPanel.GetComponent<PanelManager>().GetMaru2_2().GoUpObjectEX();
+                break;
+            case "Maru_big1":
+                wkPanel.GetComponent<PanelManager>().GetMaru3_1().GoUpObjectEX();
+                break;
+            case "Maru_big2":
+                wkPanel.GetComponent<PanelManager>().GetMaru3_2().GoUpObjectEX();
+                break;
+            case "Batu_small1":
+                wkPanel.GetComponent<PanelManager>().GetBatu1_1().GoUpObjectEX();
+                break;
+            case "Batu_small2":
+                wkPanel.GetComponent<PanelManager>().GetBatu1_2().GoUpObjectEX();
+                break;
+            case "Batu_mid1":
+                wkPanel.GetComponent<PanelManager>().GetBatu2_1().GoUpObjectEX();
+                break;
+            case "Batu_mid2":
+                wkPanel.GetComponent<PanelManager>().GetBatu2_2().GoUpObjectEX();
+                break;
+            case "Batu_big1":
+                wkPanel.GetComponent<PanelManager>().GetBatu3_1().GoUpObjectEX();
+                break;
+            case "Batu_big2":
+                wkPanel.GetComponent<PanelManager>().GetBatu3_2().GoUpObjectEX();
+                break;
+        }
+    }
 
 }
 

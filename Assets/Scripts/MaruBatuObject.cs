@@ -64,6 +64,23 @@ public class MaruBatuObject : MonoBehaviour {
 		return this.objType;
     }
 
+	public void GoUpObjectEX() {
+		// y軸のみ0にする
+		switch (Mathf.Abs(this.objType)) {
+			case 1: //小
+				transform.position = new Vector3(transform.position.x + 1, 3f, transform.position.z + 1);
+				break;
+			case 2: //中
+				transform.position = new Vector3(transform.position.x + 1.5f, 4.5f, transform.position.z + 1.5f);
+				break;
+			case 3: //大
+				transform.position = new Vector3(transform.position.x + 1.5f, 5f, transform.position.z + 1.5f);
+				break;
+		}
+
+
+	}
+
 	// Use this for initialization
 	void Start () {
 		
