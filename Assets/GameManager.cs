@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour {
 
     private bool gameSetFlg = false; //ゲームセットしたか保持するフラグ
 
+    public Button surrenderButton; //降参ボタン
+
     // Use this for initialization
     void Start() {
         // 3×3のパネルを生成
@@ -62,6 +64,7 @@ public class GameManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+
 
         //ゲームセットフラグが立っていれば処理しない
         if (gameSetFlg) {
@@ -511,7 +514,7 @@ public class GameManager : MonoBehaviour {
     }
 
     //ゲームセット処理(ゲームセット時の状態 ○勝ち:1 ×勝ち:-1 引き分け:0)
-    private void GameSetProc(int status) {
+    public void GameSetProc(int status) {
 
         switch (status) {
             case 1:

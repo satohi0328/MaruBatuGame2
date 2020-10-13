@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
 public class CenterPanelScript : MonoBehaviour {
     private bool gameSetFlg = false; //ゲームセットフラグ
@@ -31,6 +32,9 @@ public class CenterPanelScript : MonoBehaviour {
 
 
     public void OnClickGoBackTitleButton() {
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LeaveLobby();
+
         SceneManager.LoadScene("MenuScene");
     }
 

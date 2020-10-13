@@ -13,7 +13,7 @@ public class PanelManager : MonoBehaviour {
     private GameObject batu2_1, batu2_2; //中×
     private GameObject batu3_1, batu3_2; //大×
 
-    private GameObject displayedObject = null; //パネル上の一番表に表示されているオブジェクトを保持
+    //private GameObject displayedObject = null; //パネル上の一番表に表示されているオブジェクトを保持
     private ArrayList putOrderArray = new ArrayList(); //マルバツオブジェクトが置かれた順に配列に保持
 
     //パブリック変数
@@ -141,6 +141,7 @@ public class PanelManager : MonoBehaviour {
     }
     // 設置されたオブジェクト配列の更新(削除)
     public void RemoveOrderArray() {
+        print(Time.time + "リムーブオブジェクト：panel(" + panelNumber + "):" +(putOrderArray.Count - 1).ToString("0"));
         putOrderArray.RemoveAt(putOrderArray.Count - 1);
     }
 
